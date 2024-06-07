@@ -76,7 +76,7 @@ def get_artist_top_songs(token, artist_id):
     )
     headers = get_auth_header(token)
     result = requests.get(url, headers=headers)
-    print(result)
+    print(result.headers["Retry-After"])
     json_result = json.loads(result.content)["tracks"]
     return json_result
 
@@ -140,21 +140,21 @@ def get_track_analysis(token, track_id) -> dict:
 def main():
     token = get_token()
 
-    # with open("artists.csv") as f:
-    #     all_songs = []
-    #     for artist in f:
-    #         artist_id = search_for_artist(token, artist.strip())["id"]
-    #         print(artist_id)
-    #         print(get_artist_top_songs(token, artist_id))
-    #         # print(f"{artist.strip()} completed")
-    #     df = pd.DataFrame(all_songs)
-    #     df.to_csv("songs.csv", index=False)
+    with open("artists.csv") as f:
+        top_1000_songs = []
+        for artist in f:
+            artist_id = search_for_artist(token, artist.strip())["id"]
+            print(artist_id)
+            print(get_artist_top_songs(token, artist_id))
+            print(f"{artist.strip()} completed")
+        df = pd.DataFrame(top_1000_songs)
+        df.to_csv("songs.csv", index=False)
 
     # artist_name = "Rihanna"
     # artist_id = search_for_artist(token, artist_name)["id"]
     # print(f"{artist_name=}")
     # print(f"{artist_id=}")
-    print(f"{get_artist_albums(token, "1Xyo4u8uXC1ZmMpatF05PJ")=}")
+    print(f"{get_artist_top_songs(token, "1Xyo4u8uXC1ZmMpatF05PJ")=}")
 
     # with open("songs.csv") as f:
     #     output = []
