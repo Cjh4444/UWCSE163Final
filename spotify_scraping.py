@@ -4,6 +4,7 @@ import json
 import pandas as pd
 import os
 from dotenv import load_dotenv
+import time
 
 load_dotenv()
 
@@ -45,6 +46,7 @@ def search_for_artist(token, artist_name):
         print("No artist with this name exists...")
         return None
 
+    time.sleep(0.4)
     return json_result[0]
 
 
@@ -76,8 +78,9 @@ def get_artist_top_songs(token, artist_id):
     )
     headers = get_auth_header(token)
     result = requests.get(url, headers=headers)
-    print(result.headers["Retry-After"])
+    # print(result.headers["Retry-After"])
     json_result = json.loads(result.content)["tracks"]
+    time.sleep(0.5)
     return json_result
 
 
@@ -93,11 +96,12 @@ def get_track_features(token, track_id) -> dict:
     url = f"https://api.spotify.com/v1/audio-features/{track_id}"
     headers = get_auth_header(token)
     result = requests.get(url, headers=headers)
+    # print(result.status_code)
     json_result: dict = json.loads(result.content)
     json_result.pop("uri")
     json_result.pop("track_href")
     json_result.pop("analysis_url")
-
+    time.sleep(0.5)
     return json_result
 
 
@@ -134,42 +138,40 @@ def get_track_analysis(token, track_id) -> dict:
     for key in drop_keys:
         important_data.pop(key)
 
+    time.sleep(0.4)
     return important_data
 
 
 def main():
     token = get_token()
 
-    with open("artists.csv") as f:
-        top_1000_songs = []
-        for artist in f:
-            artist_id = search_for_artist(token, artist.strip())["id"]
-            print(artist_id)
-            print(get_artist_top_songs(token, artist_id))
-            print(f"{artist.strip()} completed")
-        df = pd.DataFrame(top_1000_songs)
-        df.to_csv("songs.csv", index=False)
+    # with open("artists.csv") as f:
+    #     top_1000_songs = []
+    #     for artist in f:
+    #         artist_id = search_for_artist(token, artist.strip())["id"]
+    #         for song in get_artist_top_songs(token, artist_id):
+    #             top_1000_songs.append(song["id"])
+    #         print(f"{artist.strip()} completed")
+    #     df = pd.DataFrame(top_1000_songs)
+    #     df.to_csv("top1000songs.csv", index=False)
 
     # artist_name = "Rihanna"
     # artist_id = search_for_artist(token, artist_name)["id"]
     # print(f"{artist_name=}")
     # print(f"{artist_id=}")
-    print(f"{get_artist_top_songs(token, "1Xyo4u8uXC1ZmMpatF05PJ")=}")
+    # print(f"{get_artist_top_songs(token, "1Xyo4u8uXC1ZmMpatF05PJ")=}")
 
-    # with open("songs.csv") as f:
-    #     output = []
-    #     for idx, song in enumerate(f):
-    #         track_info = get_track_features(token, song.strip())
-    #         track_info.update(get_track_analysis(token, song.strip()))
-    #         output.append(track_info)
+    with open("top1000songs.csv") as f:
+        output = []
+        for song in f:
+            track_info = get_track_features(token, song.strip())
+            track_info.update(get_track_analysis(token, song.strip()))
+            output.append(track_info)
 
-    #         print(f"{song} completed")
+            print(f"{song} completed")
 
-    #         if idx == 10:
-    #             break
-
-    #     df = pd.DataFrame(output)
-    #     df.to_csv("song_data.csv", index=False)
+        df = pd.DataFrame(output)
+        df.to_csv("1000songdata.csv", index=False)
 
 
 if __name__ == "__main__":
