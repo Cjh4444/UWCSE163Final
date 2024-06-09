@@ -5,7 +5,11 @@ import cleaning
 import numpy as np
 
 
-def Q1_analysis():
+def q1_analysis():
+    """
+    Provides the graphs to Q1:
+    Is there a correlation between certain attributes and song popularity?
+    """
     df = cleaning.get_Q1_df()
 
     corr_matrix = df.corr()
@@ -29,7 +33,11 @@ def Q1_analysis():
     plt.close()
 
 
-def Q2_analysis():
+def q2_analysis():
+    """
+    Provides the graphs to Q2:
+    How does the age of a listener affect their preferences in music genres?
+    """
     df, age_groups = cleaning.get_Q2_df()
 
     fig, [ax1, ax2, ax3] = plt.subplots(ncols=3, figsize=(15, 20))
@@ -57,7 +65,11 @@ def Q2_analysis():
     plt.close()
 
 
-def Q3_analysis():
+def q3_analysis():
+    """
+    Provides the graphs to Q3:
+    What are the most common musical elements among songs in the top 1000?
+    """
     tempo_counts, key_counts, duration_counts = cleaning.get_Q3_dfs()
 
     ax = tempo_counts.plot(
@@ -71,13 +83,7 @@ def Q3_analysis():
     ax.set_xlabel("Tempo")
     ax.set_ylabel("Count")
     ax.set_title("Tempo Counts")
-    ax.set_xticks(
-        np.arange(
-            0,
-            203,
-            step=5,
-        )
-    )
+    ax.set_xticks(np.arange(0, 203, step=5))
     ax.set_xlim(
         0,
         tempo_counts["unique_values"].max()
@@ -121,13 +127,8 @@ def Q3_analysis():
     ax.set_xlabel("Duration (seconds)")
     ax.set_ylabel("Count")
     ax.set_title("Duration Counts")
-    ax.set_xticks(
-        np.arange(
-            0,
-            600,
-            step=10,
-        )
-    )
+    ax.set_xticks(np.arange(0, 600, step=10))
+    ax.set_yticks(np.arange(0, 21, step=3))
 
     ax.set_xlim(
         0,
@@ -138,7 +139,10 @@ def Q3_analysis():
     plt.close()
 
 
-def Q1_test():
+def q1_test():
+    """
+    Test cases for Q1
+    """
     df = pd.read_csv("data/test/testing_song_features.csv")
     corr_matrix = df.corr()
 
@@ -161,7 +165,10 @@ def Q1_test():
     plt.close()
 
 
-def Q2_test():
+def q2_test():
+    """
+    Test cases for Q2
+    """
     df = pd.read_csv("data/test/testing_age_genre.csv")
 
     fig, ax = plt.subplots(1)
@@ -181,7 +188,10 @@ def Q2_test():
     plt.close()
 
 
-def Q3_test():
+def q3_test():
+    """
+    Test cases for Q3
+    """
     df = pd.read_csv("data/test/testing_tempo.csv")
 
     ax = df.plot(
@@ -208,12 +218,15 @@ def Q3_test():
 
 
 def main():
-    Q1_analysis()
-    Q1_test()
-    Q2_analysis()
-    Q2_test()
-    Q3_analysis()
-    Q3_test()
+    """
+    Main method: runs all analyses and tests
+    """
+    q1_analysis()
+    q1_test()
+    q2_analysis()
+    q2_test()
+    q3_analysis()
+    q3_test()
 
 
 if __name__ == "__main__":
