@@ -1,11 +1,20 @@
 import pandas as pd
 from pandas import DataFrame
-import matplotlib.pyplot as plt
-import seaborn as sns
 from ast import literal_eval
 
 
-def Q1_data_cleaning(main_df, stream_df):
+def q1_data_cleaning(main_df: DataFrame, stream_df: DataFrame) -> DataFrame:
+    """
+    Combines and returns the combined DataFrame of main_df
+    and stream_df
+
+    Args:
+        main_df (DataFrame): main DataFrame
+        stream_df (DataFrame): stream DataFrame
+
+    Returns:
+        DataFrame: combined Dataframe of main and stream
+    """
     main_df_clean = main_df.drop_duplicates(subset="track_id")
     main_df_clean = main_df_clean.dropna()
 
@@ -15,7 +24,8 @@ def Q1_data_cleaning(main_df, stream_df):
 
     stream_df_clean["Genre"] = stream_df_clean["Genre"].apply(literal_eval)
 
-    # Group by 'Track Name' and 'Artist', sum the 'Streams', and aggregate genres
+    # Group by 'Track Name' and 'Artist',
+    # sum the 'Streams', and aggregate genres
     stream_grouped = (
         stream_df.groupby(["Track Name", "Artist"])
         .agg(
@@ -61,7 +71,13 @@ def Q1_data_cleaning(main_df, stream_df):
     return important_df
 
 
-def Q1_data_loading() -> tuple[DataFrame, DataFrame]:
+def q1_data_loading() -> tuple[DataFrame, DataFrame]:
+    """
+    Loads the csvs into DataFrames and returns them
+
+    Returns:
+        tuple[DataFrame, DataFrame]: csv to DataFrame
+    """
     main_df = pd.read_csv("data/spotify_songs.csv")
     stream_df = pd.read_csv("data/stream_data.csv", sep="#")
 
@@ -69,18 +85,34 @@ def Q1_data_loading() -> tuple[DataFrame, DataFrame]:
 
 
 def get_Q1_df() -> DataFrame:
-    main_df, stream_df = Q1_data_loading()
+    """
+    Returns DataFrame for Q1 analysis
 
-    merged_df = Q1_data_cleaning(main_df, stream_df)
+    Returns:
+        DataFrame: merged, cleaned DataFrame
+    """
+    main_df, stream_df = q1_data_loading()
+
+    merged_df = q1_data_cleaning(main_df, stream_df)
     return merged_df
 
 
-def Q2_data_cleaning(df) -> tuple[DataFrame, list]:
+def q2_data_cleaning(df: DataFrame) -> tuple[DataFrame, list]:
+    """
+    Combines and returns cleaned DataFrame
+
+    Args:
+        df (DataFrame): _description_
+
+    Returns:
+        tuple[DataFrame, list]: cleaned dataFrame and age groups
+    """
     df = df.drop(df.columns[0], axis=1)
 
     important_cols = ["Age", "fav_music_genre"]
     important_data = df[important_cols]
 
+    # important age groups have a decent amount of individuals
     important_age_groups = ["12-20", "20-35", "35-60"]
     age_group_filter = important_data["Age"].isin(important_age_groups)
     important_data = important_data[age_group_filter]
@@ -88,7 +120,13 @@ def Q2_data_cleaning(df) -> tuple[DataFrame, list]:
     return important_data, important_age_groups
 
 
-def Q2_data_loading() -> DataFrame:
+def q2_data_loading() -> DataFrame:
+    """
+    Loads the data for Q2
+
+    Returns:
+        DataFrame: DataFrame of xlsx file
+    """
     excel_file = pd.read_excel("data/user_questions.xlsx")
     excel_file.to_csv("data/user_questions.csv")
 
@@ -96,12 +134,27 @@ def Q2_data_loading() -> DataFrame:
 
 
 def get_Q2_df() -> tuple[DataFrame, list]:
-    df = Q2_data_loading()
+    """
+    Returns the DataFrame for the Q2 and necessary columns
 
-    return Q2_data_cleaning(df)
+    Returns:
+        tuple[DataFrame, list]: DataFrame for the Q2 and necessary columns
+    """
+    df = q2_data_loading()
+
+    return q2_data_cleaning(df)
 
 
-def Q3_data_cleaning(df) -> tuple[DataFrame, DataFrame, DataFrame]:
+def q3_data_cleaning(df) -> tuple[DataFrame, DataFrame, DataFrame]:
+    """
+    Returns the 3 DataFrames for Q3 that are relevant per attribute
+
+    Args:
+        df (DataFrame): Q3 Data
+
+    Returns:
+        tuple[DataFrame, DataFrame, DataFrame]: Relevant DataFrames
+    """
     tempo_df = df["tempo"]
     key_df = df["key"]
     duration_df = df["duration_ms"]
@@ -134,11 +187,23 @@ def Q3_data_cleaning(df) -> tuple[DataFrame, DataFrame, DataFrame]:
     return tempo_counts, key_counts, duration_counts
 
 
-def Q3_data_loading() -> DataFrame:
+def q3_data_loading() -> DataFrame:
+    """
+    Loads the data for Q3
+
+    Returns:
+        DataFrame: Q3 Data
+    """
     return pd.read_csv("data/1000songdata.csv")
 
 
-def get_Q3_dfs():
-    df = Q3_data_loading()
+def get_Q3_df():
+    """
+    Gets DataFrame for Q3
 
-    return Q3_data_cleaning(df)
+    Returns:
+        _type_: Cleaned DataFrame
+    """
+    df = q3_data_loading()
+
+    return q3_data_cleaning(df)

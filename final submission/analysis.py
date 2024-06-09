@@ -70,7 +70,7 @@ def q3_analysis():
     Provides the graphs to Q3:
     What are the most common musical elements among songs in the top 1000?
     """
-    tempo_counts, key_counts, duration_counts = cleaning.get_Q3_dfs()
+    tempo_counts, key_counts, duration_counts = cleaning.get_Q3_df()
 
     ax = tempo_counts.plot(
         kind="bar",
