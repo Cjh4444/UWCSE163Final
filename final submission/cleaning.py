@@ -84,7 +84,7 @@ def q1_data_loading() -> tuple[DataFrame, DataFrame]:
     return main_df, stream_df
 
 
-def get_Q1_df() -> DataFrame:
+def get_q1_df() -> DataFrame:
     """
     Returns DataFrame for Q1 analysis
 
@@ -133,7 +133,7 @@ def q2_data_loading() -> DataFrame:
     return pd.read_csv("data/user_questions.csv")
 
 
-def get_Q2_df() -> tuple[DataFrame, list]:
+def get_q2_df() -> tuple[DataFrame, list]:
     """
     Returns the DataFrame for the Q2 and necessary columns
 
@@ -197,7 +197,7 @@ def q3_data_loading() -> DataFrame:
     return pd.read_csv("data/1000songdata.csv")
 
 
-def get_Q3_df():
+def get_q3_df():
     """
     Gets DataFrame for Q3
 

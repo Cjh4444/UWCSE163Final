@@ -10,7 +10,7 @@ def q1_analysis():
     Provides the graphs to Q1:
     Is there a correlation between certain attributes and song popularity?
     """
-    df = cleaning.get_Q1_df()
+    df = cleaning.get_q1_df()
 
     corr_matrix = df.corr()
 
@@ -38,7 +38,7 @@ def q2_analysis():
     Provides the graphs to Q2:
     How does the age of a listener affect their preferences in music genres?
     """
-    df, age_groups = cleaning.get_Q2_df()
+    df, age_groups = cleaning.get_q2_df()
 
     fig, [ax1, ax2, ax3] = plt.subplots(ncols=3, figsize=(15, 20))
 
@@ -70,7 +70,7 @@ def q3_analysis():
     Provides the graphs to Q3:
     What are the most common musical elements among songs in the top 1000?
     """
-    tempo_counts, key_counts, duration_counts = cleaning.get_Q3_df()
+    tempo_counts, key_counts, duration_counts = cleaning.get_q3_df()
 
     ax = tempo_counts.plot(
         kind="bar",
