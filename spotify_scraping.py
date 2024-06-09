@@ -96,7 +96,7 @@ def get_track_features(token, track_id) -> dict:
     url = f"https://api.spotify.com/v1/audio-features/{track_id}"
     headers = get_auth_header(token)
     result = requests.get(url, headers=headers)
-    # print(result.status_code)
+    print(result.headers)
     json_result: dict = json.loads(result.content)
     json_result.pop("uri")
     json_result.pop("track_href")
@@ -163,12 +163,16 @@ def main():
 
     with open("top1000songs.csv") as f:
         output = []
-        for song in f:
+        for idx, song in enumerate(f):
             track_info = get_track_features(token, song.strip())
             track_info.update(get_track_analysis(token, song.strip()))
             output.append(track_info)
 
             print(f"{song} completed")
+
+            if (idx % 100) == 0:
+                df = pd.DataFrame(output)
+                df.to_csv("1000songdata.csv", index=False)
 
         df = pd.DataFrame(output)
         df.to_csv("1000songdata.csv", index=False)
