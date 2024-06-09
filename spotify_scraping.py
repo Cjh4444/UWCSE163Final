@@ -177,6 +177,9 @@ def main():
         df = pd.DataFrame(output)
         df.to_csv("1000songdata.csv", index=False)
 
+        df = pd.DataFrame(output)
+        df.to_csv("1000songdata------2.csv", index=False)
+
 
 if __name__ == "__main__":
     main()
