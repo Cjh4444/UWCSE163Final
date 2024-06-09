@@ -39,7 +39,26 @@ def Q1_data_cleaning(main_df, stream_df):
         right_on=["Track Name", "Artist"],
     )
 
-    return merged_df
+    is_pop = merged_df["playlist_genre"] == "pop"
+    df = merged_df[is_pop]
+
+    relevant_cols = [
+        "danceability",
+        "energy",
+        "loudness",
+        "speechiness",
+        "acousticness",
+        "instrumentalness",
+        "liveness",
+        "valence",
+        "tempo",
+        "duration_ms",
+        "Streams",
+    ]
+
+    important_df = df[relevant_cols]
+
+    return important_df
 
 
 def Q1_data_loading() -> tuple[DataFrame, DataFrame]:
@@ -70,6 +89,9 @@ def Q2_data_cleaning(df) -> tuple[DataFrame, list]:
 
 
 def Q2_data_loading() -> DataFrame:
+    excel_file = pd.read_excel("data/user_questions.xlsx")
+    excel_file.to_csv("data/user_questions.csv")
+
     return pd.read_csv("data/user_questions.csv")
 
 
